@@ -46,7 +46,7 @@ from scipy.stats import ttest_ind
    - **pandas** es una biblioteca de Python diseñada para la manipulación y el análisis de datos estructurados (como tablas o bases de datos). Proporciona estructuras de datos como:
      - **DataFrame**: para manejar datos en formato tabular, con filas y columnas.
      - **Series**: para manejar datos unidimensionales.
-   - En el contexto de procesamiento de señales EMG, podrías utilizar pandas para cargar, almacenar y organizar los datos recogidos durante el experimento, facilitando su análisis y visualización.
+   - En el contexto de procesamiento de señales EMG, se utiliza pandas para cargar, almacenar y organizar los datos recogidos durante el experimento, facilitando su análisis y visualización.
 
 ### 2. **import numpy as np**
    - **numpy** es la biblioteca de referencia para cálculos numéricos en Python. Se usa principalmente para trabajar con matrices y arreglos multidimensionales, además de incluir un amplio rango de funciones matemáticas.
@@ -90,7 +90,7 @@ La electromiografía (EMG) en el bíceps se realiza utilizando electrodos que re
    - **Electrodo de referencia**: Este electrodo se coloca en una zona inactiva (por ejemplo, un hueso cercano o una zona sin músculo) para comparar la actividad eléctrica y mejorar la precisión de la señal captada.
    
 3. **Captura de la señal**:
-   - El sujeto realiza contracciones controladas del bíceps, como flexionar el brazo o levantar peso. Durante este proceso, los electrodos registran la señal EMG en tiempo real.
+   - El sujeto realiza contracciones controladas del bíceps, como en nuestro caso flexionar el brazo. Durante este proceso, los electrodos registran la señal EMG en tiempo real.
    - La señal captada es el resultado de la actividad eléctrica generada por las fibras musculares del bíceps cuando reciben estímulos nerviosos y se contraen. 
 
 4. **Registro de la señal**:
@@ -102,7 +102,7 @@ Primero, su **aislamiento muscular** es clave. El bíceps braquial es un múscul
 
 Además, el bíceps tiene una **alta accesibilidad**. Al estar ubicado en una zona fácil de alcanzar, se facilita la colocación de los electrodos, la calibración del equipo y el registro de la señal, incluso en actividades dinámicas como el levantamiento de peso.
 
-El bíceps también participa en una **amplia gama de movimientos**. Se activa en distintos tipos de actividades, como la flexión del codo y la rotación del antebrazo, lo que permite medir una gran variedad de contracciones musculares, desde ligeras hasta máximas, proporcionando una representación integral de la actividad muscular.
+El bíceps también participa en una **amplia gama de movimientos**. Se activa en distintos tipos de actividades, como la flexión del codo, lo que permite medir una gran variedad de contracciones musculares, desde ligeras hasta máximas, proporcionando una representación integral de la actividad muscular.
 
 Otra ventaja es su **capacidad para medir la fatiga muscular**. Al ser fácilmente fatigable, especialmente en ejercicios repetitivos o con pesos, es un excelente candidato para estudiar la fatiga muscular. Durante la fatiga, se observan cambios notables en la señal EMG, como un aumento en la amplitud o una disminución en la frecuencia, lo que permite extraer información valiosa sobre el rendimiento muscular bajo esfuerzo.
 
@@ -159,7 +159,7 @@ La **duración de la señal** es de 30.00 segundos, un periodo adecuado que perm
 
 La **longitud de la señal** es de 30,000 puntos, resultado de multiplicar la frecuencia de muestreo (1000 Hz) por la duración de la señal (30 segundos). Esta cantidad significativa de datos es fundamental para llevar a cabo análisis detallados y robustos, lo que permite realizar estadísticas y análisis espectrales precisos. Tener 30,000 puntos de datos facilita la identificación de patrones y tendencias en la actividad muscular, contribuyendo a una comprensión más completa de su funcionamiento.
 
-Adicionalmente, se registraron **10 contracciones musculares** durante este periodo de muestreo. Esta cantidad es clave, ya que permite evaluar la respuesta del bíceps a las contracciones repetidas, lo que es esencial para el análisis de la fatiga muscular. Al observar cómo varía la señal EMG durante estas contracciones, se pueden identificar cambios en la amplitud y la frecuencia de la señal, que son indicadores de fatiga. Esto proporciona información valiosa sobre el rendimiento muscular y cómo este se ve afectado por la actividad repetitiva.
+Adicionalmente, se registraron ** 7 contracciones musculares** durante este periodo de muestreo. Esta cantidad es clave, ya que permite evaluar la respuesta del bíceps a las contracciones repetidas, lo que es esencial para el análisis de la fatiga muscular. Al observar cómo varía la señal EMG durante estas contracciones, se pueden identificar cambios en la amplitud y la frecuencia de la señal, que son indicadores de fatiga. Esto proporciona información valiosa sobre el rendimiento muscular y cómo este se ve afectado por la actividad repetitiva.
 
 
 <a name="filtro"></a> 
@@ -223,7 +223,7 @@ def apply_windowing(filtered_data, sampling_rate):
 ![image](https://github.com/user-attachments/assets/a6201bb5-802a-4e5b-8774-adeb7dcd3fcc)
 
 
-El **aventaneo** es un proceso crítico en el análisis de señales que implica dividir una señal continua en segmentos más pequeños o ventanas. Este enfoque es particularmente útil en el procesamiento de señales EMG, ya que permite realizar un análisis más detallado y localizado de la señal en el tiempo. En el código proporcionado, se utiliza una **ventana de Hamming**, que es una de las muchas ventanas disponibles, y se justifica su elección por varias razones.
+El **aventaneo** es un proceso crítico en el análisis de señales que implica dividir una señal continua en segmentos más pequeños o ventanas. Este enfoque es particularmente útil en el procesamiento de señales EMG, ya que permite realizar un análisis más detallado y localizado de la señal en el tiempo. En el código, se utiliza una **ventana de Hamming**, que es una de las muchas ventanas disponibles, y se justifica su elección por varias razones.
 
 #### Criterios para Seleccionar la Ventana de Hamming
 
