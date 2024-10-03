@@ -308,6 +308,16 @@ def spectral_analysis(windowed_data, sampling_rate, window_size):
 
 ![image](https://github.com/user-attachments/assets/2ced3ba8-2ad1-44f2-b2c7-a55d962e42cb)
 
+La observación de que, a medida que se pasa de una ventana a otra en el análisis de la señal EMG, se van viendo menos picos en el espectro de frecuencias puede deberse a varios factores relacionados con la fisiología del músculo, la naturaleza de la señal EMG y el proceso de filtrado y análisis espectral.
+
+Una de las explicaciones más comunes es la fatiga muscular. Durante el ejercicio, especialmente cuando se realizan contracciones repetitivas o de larga duración, los músculos tienden a fatigarse. La fatiga se manifiesta en la señal EMG como una disminución en la capacidad de los músculos para generar contracciones fuertes y sostenidas. Esto puede resultar en un menor número de picos en el espectro de frecuencia a medida que se avanza en las ventanas de tiempo. Con el tiempo, los músculos pueden reclutar menos unidades motoras o activar las que están disponibles de manera menos eficiente, lo que se traduce en una disminución de la actividad eléctrica y, por ende, menos picos en la señal.
+
+A medida que se realizan contracciones sucesivas, el patrón de activación muscular puede cambiar. Inicialmente, las contracciones pueden ser más potentes y más sincronizadas, lo que resulta en picos claros en el espectro. Sin embargo, a medida que avanza el tiempo y las contracciones se vuelven menos eficientes, puede haber una menor coordinación entre las fibras musculares, lo que se traduce en una menor amplitud y en la cantidad de picos observados en la frecuencia.
+
+El proceso de análisis espectral mediante la Transformada de Fourier implica calcular la frecuencia de las señales dentro de cada ventana de tiempo. Si las contracciones iniciales son más fuertes y mejor definidas, se observarán más picos. A medida que las ventanas avanzan, si la actividad muscular se vuelve más suave o menos intensa, es probable que el análisis espectral capture menos frecuencias dominantes. Además, cada ventana representa un segmento de tiempo que puede incluir variaciones en la actividad muscular, y si la señal se vuelve más homogénea o menos activa, esto se reflejará en un espectro con menos picos.
+
+Los filtros aplicados durante el procesamiento de la señal también pueden influir en la cantidad de picos que se observan en el espectro. Al aplicar filtros, se eliminan ciertas frecuencias consideradas como ruido, lo que puede hacer que algunos picos en el espectro se atenúen o se eliminen completamente. Si las contracciones posteriores son menos intensas o tienen un rango de frecuencia diferente, el filtrado podría atenuar aún más esas frecuencias, resultando en un espectro con menos picos.
+
 ### Cálculo de Parámetros de Frecuencia (`calculate_frequency_parameters`)
 
 La función `calculate_frequency_parameters` es fundamental para el análisis espectral de las señales EMG, ya que permite extraer características clave que describen el comportamiento de la señal en el dominio de la frecuencia. Esta función se centra en calcular tres parámetros importantes: la **frecuencia dominante**, la **frecuencia media** y la **desviación estándar** del espectro de frecuencias. Estos parámetros son esenciales para entender la dinámica muscular y evaluar la fatiga o el rendimiento.
@@ -349,22 +359,204 @@ def calculate_frequency_parameters(spectrum, freqs):
 
 ![image](https://github.com/user-attachments/assets/cb524516-acb6-41b9-a452-ec6dd586fc6d)
 
-
-
-
-
 <a name="hipotesis"></a> 
 ## Prueba de hipotesis
 
+Una prueba de hipótesis es un procedimiento estadístico utilizado para tomar decisiones sobre una afirmación o suposición (la hipótesis) acerca de una población o un proceso, basándose en datos muestrales. Su objetivo principal es determinar si hay suficiente evidencia en los datos para aceptar o rechazar la hipótesis inicial, conocida como hipótesis nula (H0), en favor de una hipótesis alternativa (H1 o Ha). Este proceso es esencial en la investigación y el análisis de datos, ya que permite validar o refutar suposiciones de manera sistemática y objetiva.
+
+Los componentes de una prueba de hipótesis incluyen la hipótesis nula (H0) y la hipótesis alternativa (H1 o Ha). La hipótesis nula es la afirmación que se quiere probar, generalmente representando una posición de "no efecto" o "no diferencia". Por otro lado, la hipótesis alternativa es la afirmación que se acepta si se rechaza la hipótesis nula, representando una posición de "efecto" o "diferencia". Junto a estas hipótesis, se establece un nivel de significancia (α), que define el riesgo de cometer un error tipo I, es decir, rechazar la hipótesis nula cuando es verdadera.
+
 
 ```c
-
+# --- Función para realizar la prueba de hipótesis ---
+def hypothesis_test(median_frequencies):
+    mid_point = len(median_frequencies) // 2
+    first_half = median_frequencies[:mid_point]
+    second_half = median_frequencies[mid_point:]
+    
+    # Realizar prueba de hipótesis t-test para comparar la primera mitad y la segunda mitad
+    stat, p_value = ttest_ind(first_half, second_half)
+    
+    if p_value < 0.05:
+        print("Existe una diferencia significativa en la frecuencia mediana, indicando fatiga muscular.")
+    else:
+        print("No se observó una diferencia significativa en la frecuencia mediana.")
+    
+    return p_value
 ```
+
+![image](https://github.com/user-attachments/assets/ddcd3fad-5b35-4871-94dc-641cd7f6f32d)
+
+![image](https://github.com/user-attachments/assets/bbdd6a94-93d6-43e7-ab23-0f955516a7b1)
+
+La prueba de hipótesis se realizo para evaluar la fatiga muscular se basa en la comparación de la frecuencia mediana de dos grupos de datos: la primera mitad y la segunda mitad de las frecuencias medianas calculadas a partir de tu señal EMG. La hipótesis nula (H0) establece que no hay diferencia significativa entre las frecuencias medianas de ambos grupos, mientras que la hipótesis alternativa (H1) sugiere que hay una diferencia significativa.
+
+El resultado de la prueba, que indica un p-valor de aproximadamente 0.753, sugiere que no hay evidencia suficiente para rechazar la hipótesis nula. En términos simples, esto significa que no se observó una diferencia significativa en la frecuencia mediana entre las dos mitades de tu señal EMG. Un p-valor mayor que el nivel de significancia comúnmente utilizado (0.05) indica que las diferencias observadas en las frecuencias medianas podrían ser el resultado de la variabilidad natural en los datos, y no de un efecto real asociado con la fatiga muscular.
+
+En la práctica, esto implica que, según los datos que se han analizado, no se puede concluir que la fatiga muscular haya tenido un efecto significativo en la frecuencia mediana de las contracciones musculares que se registraron en tu señal EMG. Es posible que otros factores, como la variabilidad individual en la señal EMG o el diseño del experimento, hayan influido en los resultados.
 
 <a name="menu"></a> 
 ## Menu
 
+El menú principal del programa está diseñado para facilitar la interacción del usuario con el análisis de la señal EMG. Cada opción permite realizar una tarea específica relacionada con el procesamiento y análisis de la señal. A continuación, se explican las distintas funcionalidades disponibles en este menú.
+
+### Opción 1: Leer señal desde Excel y mostrar características
+
+Al seleccionar esta opción, el programa carga la señal EMG desde un archivo Excel y presenta información relevante, como la frecuencia de muestreo, la duración total de la señal, la longitud de los datos y el número de contracciones. Luego, se graficará la señal cruda en función del tiempo, permitiendo al usuario visualizar la forma de la señal y tener una mejor comprensión de su contenido.
+
+### Opción 2: Filtrar señal EMG y mostrar parámetros del filtro
+
+Esta opción permite al usuario aplicar filtros pasa altas y pasa bajas a la señal EMG. Se especifican los límites de frecuencia y el orden del filtro. Una vez filtrada la señal, el programa visualiza la señal resultante, destacando el rango de frecuencias que ha sido permitido por el filtro. Esto es útil para eliminar el ruido no deseado y resaltar las características importantes de la señal EMG.
+
+### Opción 3: Aplicar ventana y mostrar su efecto
+
+Al elegir esta opción, se aplica un proceso de aventanamiento a la señal filtrada. La función divide la señal en segmentos o ventanas, y se calcula la mediana de cada una de estas. Los resultados se muestran en la consola, y se grafican tanto la señal filtrada original como las ventanas individuales, lo que ayuda a observar cómo cada ventana captura diferentes características de la señal EMG. Esto es fundamental en el análisis de señales, ya que permite realizar un estudio más detallado en segmentos más pequeños.
+
+### Opción 4: Transformada de Fourier y análisis de frecuencias
+
+En esta opción, el programa realiza una transformada de Fourier sobre las ventanas de la señal filtrada. Esto transforma la señal del dominio del tiempo al dominio de la frecuencia, permitiendo analizar cómo se distribuyen las frecuencias en la señal EMG. Se grafican los espectros de frecuencia de las primeras cinco ventanas y se calculan parámetros como la frecuencia dominante, la frecuencia media y la desviación estándar para cada ventana. Esto ayuda a entender la variabilidad de las frecuencias en la señal y a identificar patrones significativos.
+
+### Opción 5: Prueba de Hipótesis para Fatiga Muscular
+
+Al seleccionar esta opción, el usuario realiza una prueba de hipótesis para evaluar si hay diferencias significativas en la frecuencia mediana entre dos grupos de datos, lo que puede indicar fatiga muscular. Se calcula un p-valor, que se interpreta para determinar si se puede rechazar la hipótesis nula (que no hay diferencia) en favor de la hipótesis alternativa (que sí hay diferencia). El resultado de la prueba se muestra en la consola, ofreciendo información valiosa sobre el estado de fatiga muscular.
+
+### Opción 6: Salir
+
+Finalmente, esta opción permite al usuario salir del programa. Es un paso importante para finalizar la sesión de análisis de datos de manera ordenada.
+
+
 ```c
+# --- Menú Principal ---
+def main_menu():
+    file_path = 'emg_signal_with_fatigue.xlsx'
+    sampling_rate = 1000  # Hz
+
+    while True:
+        print("\n--- Menú de Laboratorio EMG ---")
+        print("1. Leer señal desde Excel y mostrar características")
+        print("2. Filtrar señal EMG y mostrar parámetros del filtro")
+        print("3. Aplicar ventana y mostrar su efecto")
+        print("4. Transformada de Fourier y análisis de frecuencias")
+        print("5. Prueba de Hipótesis para Fatiga Muscular")
+        print("6. Salir")
+
+        choice = input("Selecciona una opción: ")
+
+        if choice == "1":
+            print("Leyendo señal desde archivo Excel...")
+            time, data = read_signal_from_excel(file_path)
+
+            # Mostrar detalles de la señal
+            duration = len(time) / sampling_rate
+            print(f"Frecuencia de muestreo: {sampling_rate} Hz")
+            print(f"Duración de la señal: {duration:.2f} segundos")
+            print(f"Longitud de la señal: {len(data)} puntos")
+            print(f"Contracciones: {10} contracciones")
+            plt.figure(figsize=(10, 4))
+            plt.plot(time, data, color='purple')
+            plt.title('Señal EMG Cruda desde Excel')
+            plt.xlabel('Tiempo [s]')
+            plt.ylabel('Voltaje [mV]')
+            plt.grid(True)
+            plt.show()
+
+        elif choice == "2":
+            print("Aplicando filtros pasa altas y pasa bajas...")
+            _, data = read_signal_from_excel(file_path)
+            lowcut = 20.0
+            highcut = 450.0
+            order = 5
+            d2 = data[1:100]
+            filtered_data = butter_filter(d2, lowcut, highcut, sampling_rate, order)
+
+            # Mostrar detalles del filtro
+            print(f"Filtro pasa banda aplicado con corte de {lowcut}-{highcut} Hz y orden {order}.")
+
+            time = np.linspace(0, len(filtered_data) / sampling_rate, len(filtered_data))
+            plt.figure(figsize=(10, 4))
+            plt.plot(time, filtered_data, color='blue')
+            plt.title('Señal EMG Filtrada (20-450 Hz)')
+            plt.xlabel('Tiempo [s]')
+            plt.ylabel('Voltaje [mV]')
+            plt.grid(True)
+            plt.show()
+
+        elif choice == "3":
+            print("Aplicando aventanamiento y mostrando el efecto de la ventana...")
+            _, data = read_signal_from_excel(file_path)
+            filtered_data = butter_filter(data, 20.0, 450.0, sampling_rate)
+            windowed_data, window_size = apply_windowing(filtered_data, sampling_rate)
+            # Calcular la mediana de cada ventana
+            medians = calculate_median_per_window(windowed_data)
+
+            # Mostrar las medianas de las ventanas
+            for i, median_value in enumerate(medians):
+                print(f"Mediana de la ventana {i+1}: {median_value}")
+
+            # Mostrar la señal antes del aventanamiento
+            time = np.linspace(0, len(filtered_data) / sampling_rate, len(filtered_data))
+            plt.figure(figsize=(10, 4))
+            plt.plot(time, filtered_data, label="Señal Filtrada", color='blue')
+            plt.title('Señal Filtrada (antes del aventanamiento)')
+            plt.xlabel('Tiempo [s]')
+            plt.ylabel('Voltaje [mV]')
+            plt.grid(True)
+            plt.show()
+
+            # Mostrar las ventanas aplicadas
+            for i, windowed_segment in enumerate(windowed_data[:5]):  # Mostramos solo las primeras 5 ventanas
+                plt.figure(figsize=(10, 4))
+                plt.plot(windowed_segment, label=f"Ventana {i+1}", color='green')
+                plt.title(f'Señal Aventanada - Ventana {i+1}')
+                plt.xlabel('Muestras')
+                plt.ylabel('Voltaje [mV]')
+                plt.grid(True)
+                plt.show()
+
+        elif choice == "4":
+            print("Realizando transformada de Fourier y análisis de frecuencias...")
+            _, data = read_signal_from_excel(file_path)
+            filtered_data = butter_filter(data, 20.0, 450.0, sampling_rate)
+            windowed_data, window_size = apply_windowing(filtered_data, sampling_rate)
+            spectral_data, freqs = spectral_analysis(windowed_data, sampling_rate, window_size)
+
+            # Graficar y calcular parámetros para cada ventana
+            for i in range(min(5, len(spectral_data))):  # Solo para las primeras 5 ventanas
+                plt.figure(figsize=(10, 4))
+                plt.plot(freqs, spectral_data[i], color='green')
+                plt.title(f'Espectro de Frecuencia - Ventana {i + 1}')
+                plt.xlabel('Frecuencia [Hz]')
+                plt.ylabel('Amplitud')
+                plt.grid(True)
+                plt.show()
+                
+                # Calcular y mostrar parámetros de frecuencia
+                frequency_params = calculate_frequency_parameters(spectral_data[i], freqs)
+                print(f"Ventana {i + 1}: Frecuencia Dominante: {frequency_params['dominant_frequency']:.2f} Hz, "
+                      f"Frecuencia Media: {frequency_params['mean_frequency']:.2f} Hz, "
+                      f"Desviación Estándar: {frequency_params['std_dev_frequency']:.2f}")
+
+        elif choice == "5":
+            print("Realizando prueba de hipótesis para evaluar la fatiga muscular...")
+            _, data = read_signal_from_excel(file_path)
+            filtered_data = butter_filter(data, 20.0, 450.0, sampling_rate)
+            windowed_data, window_size = apply_windowing(filtered_data, sampling_rate)
+            spectral_data, freqs = spectral_analysis(windowed_data, sampling_rate, window_size)
+
+            median_frequencies = calculate_median_frequency(spectral_data, freqs)
+            p_value = hypothesis_test(median_frequencies)
+            print(f"P-valor de la prueba de hipótesis: {p_value}")
+
+        elif choice == "6":
+            print("Saliendo del programa.")
+            break
+
+        else:
+            print("Opción no válida. Por favor, intenta de nuevo.")
+
+# Ejecutar el menú principal
+if __name__ == "__main__":
+    main_menu()
 
 ```
 
