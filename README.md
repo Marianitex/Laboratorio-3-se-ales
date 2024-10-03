@@ -252,6 +252,53 @@ Además, el filtrado previo aplicado a la señal (como el filtrado Butterworth) 
 
 El aventanamiento también permite realizar análisis espectral en cada ventana individualmente. Dado que el análisis se realiza en segmentos más pequeños y controlados, se puede aplicar la transformada de Fourier de manera más efectiva. Esto significa que se puede observar cómo varía la señal en términos de frecuencia y amplitud, lo que facilita la identificación de patrones de activación muscular mientras se reduce el impacto del ruido.
 
+Claro, aquí tienes la explicación organizada por párrafos:
+
+### Cálculo de la Frecuencia Mediana por Ventana (`calculate_median_frequency`)
+
+La función `calculate_median_frequency` tiene como objetivo calcular la **frecuencia mediana** de cada ventana de datos espectrales obtenidos a través de la Transformada de Fourier. La frecuencia mediana es un valor estadístico que divide el espectro de frecuencia en dos mitades, donde la mitad inferior tiene amplitudes más bajas y la mitad superior tiene amplitudes más altas. Para lograr esto, la función utiliza el cálculo de la suma acumulativa de las amplitudes del espectro para identificar el punto en el que se alcanza la mitad del total.
+
+El proceso comienza calculando la suma acumulativa de las amplitudes del espectro usando `np.cumsum(spectrum)`. A partir de esta suma acumulativa, se determina el índice de la frecuencia mediana buscando el primer índice donde la suma acumulativa sea al menos la mitad de la suma total de las amplitudes. Una vez que se identifica este índice, se almacena la frecuencia correspondiente en una lista llamada `median_frequencies`. Esta medida se convierte en una métrica clave para entender la activación muscular y los cambios asociados a la fatiga.
+
+La frecuencia mediana es particularmente valiosa en el análisis de la señal EMG, ya que proporciona una medida de tendencia central que es menos sensible a valores atípicos en comparación con la media. Al evaluar la frecuencia mediana, se puede obtener información sobre la activación muscular y cómo cambia con el tiempo. Durante situaciones de fatiga, es común observar un cambio en esta frecuencia, lo que permite a los investigadores y profesionales de la salud realizar evaluaciones sobre el estado muscular de un individuo.
+
+### Cálculo de la Mediana por Ventana (`calculate_median_per_window`)
+
+Por otro lado, la función `calculate_median_per_window` se centra en calcular la **mediana** de los valores de voltaje dentro de cada ventana de tiempo de la señal EMG. La mediana es una medida de tendencia central que representa el valor medio de un conjunto de datos ordenados, siendo menos susceptible a la influencia de valores extremos en comparación con la media.
+
+Esta función utiliza una comprensión de lista para extraer la mediana de cada ventana de datos. Al calcular la mediana, se obtiene una representación del comportamiento de la señal en cada segmento de tiempo, lo cual es fundamental para entender la dinámica de la actividad muscular durante las contracciones.
+
+El cálculo de la mediana en las ventanas de señal EMG también permite identificar patrones de activación y variaciones en la actividad muscular. Junto con la frecuencia mediana, estas métricas son esenciales para evaluar cómo responde el músculo a diferentes tipos de esfuerzo y para monitorear la fatiga a lo largo del tiempo.
+
+```c
+# --- Cálculo de la frecuencia mediana por ventana ---
+def calculate_median_frequency(spectral_data, freqs):
+    median_frequencies = []
+    for spectrum in spectral_data:
+        cumsum = np.cumsum(spectrum)
+        median_idx = np.where(cumsum >= cumsum[-1] / 2)[0][0]  # Índice de la frecuencia mediana
+        median_frequencies.append(freqs[median_idx])  # Agregar la frecuencia mediana
+    return median_frequencies
+
+def calculate_median_per_window(windowed_data):
+    medians = [np.median(window) for window in windowed_data]  # Calcula la mediana de cada ventana
+    return medians
+```
+
+<a name="analisis"></a> 
+## Analisis espectral
+
+
+```c
+# --- Función para realizar el análisis espectral ---
+def spectral_analysis(windowed_data, sampling_rate, window_size):
+    spectral_data = [np.abs(fft(w))[:window_size // 2] for w in windowed_data]
+    freqs = fftfreq(window_size, 1/sampling_rate)[:window_size // 2]
+    return spectral_data, freqs
+```
+
+
+
 <a name="hipotesis"></a> 
 ## Prueba de hipotesis
 
