@@ -240,6 +240,17 @@ Para ilustrar el efecto del aventanamiento, es útil comparar visualmente la se�
 
 ![image](https://github.com/user-attachments/assets/4097525b-8281-473c-b7f2-0b195bd995dd)
 
+### Reducción del Ruido en el Aventanamiento de la Señal EMG
+
+El **aventanamiento** es una técnica utilizada en el procesamiento de señales que implica dividir la señal en segmentos o ventanas más pequeñas. Este método tiene un impacto significativo en la reducción del ruido en las señales EMG por varias razones clave.
+
+Primero, las ventanas, como la **ventana de Hamming**, están diseñadas para suavizar las transiciones en los bordes de cada segmento. En lugar de cortar abruptamente la señal, la ventana de Hamming reduce gradualmente la amplitud de la señal a cero en los extremos. Esto minimiza las discontinuidades que pueden introducir ruido o artefactos en la señal. Al aplicar esta suavización, se evita que los picos abruptos de amplitud afecten el análisis espectral de la señal, contribuyendo a una representación más limpia y menos ruidosa.
+
+En segundo lugar, cuando se utiliza el aventanamiento, cada ventana captura solo una parte de la señal en un momento específico. Dado que las señales EMG pueden contener ruido aleatorio, promediar varias ventanas permite que el ruido se disperse. A medida que se procesan múltiples ventanas, las variaciones de ruido pueden cancelarse entre sí, mientras que la señal EMG real, que es más coherente en el tiempo, se preserva. Este proceso de promediación ayuda a mejorar la relación señal-ruido (SNR) en la señal analizada.
+
+Además, el filtrado previo aplicado a la señal (como el filtrado Butterworth) elimina frecuencias no deseadas y ruido de alta frecuencia. Al dividir la señal en ventanas, se tiene la oportunidad de centrarse en las frecuencias de interés en cada segmento. Esto significa que solo las partes de la señal que son relevantes para el análisis se consideran, y el ruido que podría estar presente en otras frecuencias se elimina, resultando en ventanas menos ruidosas.
+
+El aventanamiento también permite realizar análisis espectral en cada ventana individualmente. Dado que el análisis se realiza en segmentos más pequeños y controlados, se puede aplicar la transformada de Fourier de manera más efectiva. Esto significa que se puede observar cómo varía la señal en términos de frecuencia y amplitud, lo que facilita la identificación de patrones de activación muscular mientras se reduce el impacto del ruido.
 
 <a name="hipotesis"></a> 
 ## Prueba de hipotesis
