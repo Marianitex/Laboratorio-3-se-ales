@@ -134,6 +134,14 @@ def read_signal_from_excel(file_path):
     data = df.iloc[:, 1].values
     return time, data
 ```
+La gráfica de la señal capturada refleja información crucial sobre la actividad muscular, destacando varios aspectos clave que justifican la calidad y utilidad de los datos adquiridos. En este caso, la **frecuencia de muestreo** es de 1000 Hz, lo que implica que la señal se muestrea 1000 veces por segundo. Esta alta frecuencia de muestreo es esencial para registrar adecuadamente la actividad eléctrica del músculo, permitiendo capturar cambios rápidos en la señal EMG. Dado que las señales EMG pueden contener componentes de frecuencia de hasta 500 Hz, una frecuencia de muestreo de 1000 Hz asegura que se evite el aliasing, cumpliendo con el teorema de muestreo de Nyquist.
+
+La **duración de la señal** es de 30.00 segundos, un periodo adecuado que permite el registro de múltiples contracciones musculares. Este tiempo es beneficioso para observar variaciones en la actividad muscular a lo largo del tiempo y evaluar la respuesta del músculo ante diferentes niveles de esfuerzo. Además, la duración proporciona un contexto suficiente para estudiar la fatiga muscular y cómo esta afecta la función del músculo durante el ejercicio.
+
+La **longitud de la señal** es de 30,000 puntos, resultado de multiplicar la frecuencia de muestreo (1000 Hz) por la duración de la señal (30 segundos). Esta cantidad significativa de datos es fundamental para llevar a cabo análisis detallados y robustos, lo que permite realizar estadísticas y análisis espectrales precisos. Tener 30,000 puntos de datos facilita la identificación de patrones y tendencias en la actividad muscular, contribuyendo a una comprensión más completa de su funcionamiento.
+
+Adicionalmente, se registraron **10 contracciones musculares** durante este periodo de muestreo. Esta cantidad es clave, ya que permite evaluar la respuesta del bíceps a las contracciones repetidas, lo que es esencial para el análisis de la fatiga muscular. Al observar cómo varía la señal EMG durante estas contracciones, se pueden identificar cambios en la amplitud y la frecuencia de la señal, que son indicadores de fatiga. Esto proporciona información valiosa sobre el rendimiento muscular y cómo este se ve afectado por la actividad repetitiva.
+
 
 <a name="filtro"></a> 
 ## Filtrado de la señal
