@@ -110,7 +110,14 @@ Además, la **buena calidad de la señal** EMG es otro punto a favor del bíceps
 
 Por último, el bíceps es comúnmente utilizado en **estudios neuromusculares**, dada su simplicidad anatómica y la facilidad para aislarlo en pruebas de fuerza o resistencia. Esto lo convierte en un músculo ideal para investigar la interacción entre el sistema nervioso y el sistema muscular.
 
-IMAGEEEEEEEEEEEEN
+
+![Clipped_image_20241003_082404](https://github.com/user-attachments/assets/b814a705-55a1-4090-b25a-6b7860a8a19d)
+
+
+![Clipped_image_20241003_082530](https://github.com/user-attachments/assets/34384239-4810-4064-a5e9-8f983eedd6f8)
+
+
+![Clipped_image_20241003_082554](https://github.com/user-attachments/assets/9d8dc853-566a-437c-9cda-e4f7fab1933a)
 
 ### Adquisición de la señal EMG con STM32
 
@@ -118,10 +125,14 @@ El proceso de toma de señal EMG con un STM32 y un módulo de ECG (AD8232) se ll
 
 ![OIP](https://github.com/user-attachments/assets/03851d9f-e551-42c7-99f5-8d4adc33a956)
 
+![IMG-20241003-WA0012](https://github.com/user-attachments/assets/88f3ecfb-be97-4719-945d-42d4cbbd9a7b)
+
+
+
 Una vez que la señal ha sido filtrada y amplificada, el **STM32** entra en acción. Este microcontrolador tiene un **ADC (Conversor Analógico a Digital)** que convierte la señal EMG, que es analógica, en una señal digital. Esto permite que el STM32 procese la señal, almacene temporalmente los datos y, si es necesario, aplicar filtros adicionales que se realizan mas adelante para mejorar la calidad de la señal. El microcontrolador se configura para tomar muestras de la señal EMG a una frecuencia adecuada, típicamente entre 500 y 1000 Hz, lo que garantiza que se capturen detalles suficientes de la actividad muscular.
 
 Después de la adquisición, el STM32 transmite los datos a una interfaz externa, normalmente una computadora. Esto se puede hacer mediante **comunicación inalámbrica**, como Bluetooth. Esta transmisión permite que los datos EMG sean visualizados o procesados en tiempo real.
-
+ 
 En la **interfaz de usuario**, los datos son recibidos y visualizados en tiempo real utilizando un programa en la computadora, como Python. Estas herramientas permiten graficar la señal EMG y realizar análisis básicos. Además, los datos se pueden almacenar en un archivo para su posterior procesamiento. Un formato común es **Excel**, que permite almacenar los datos en columnas de tiempo y voltaje.
 
 Finalmente, los datos se guardan en un archivo **Excel** para análisis posterior. Con la ayuda de bibliotecas como `pandas`, los datos se pueden leer fácilmente desde el archivo Excel, lo que permite realizar análisis adicionales como filtrado, análisis de frecuencias (FFT) o estudios de fatiga muscular. Este flujo de trabajo proporciona una forma eficiente de captar, visualizar y almacenar señales EMG utilizando un STM32 y un módulo ECG.
