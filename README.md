@@ -285,10 +285,13 @@ def calculate_median_per_window(windowed_data):
     return medians
 ```
 
+![image](https://github.com/user-attachments/assets/7567db7d-9e27-4e45-8d39-723447126309)
+
+
 <a name="analisis"></a> 
 ## Analisis espectral
 
-
+La función `spectral_analysis` complementa el cálculo de estos parámetros al realizar la Transformada de Fourier (FFT) sobre los segmentos de señal EMG que se han dividido en ventanas. Aquí, se calcula el espectro de amplitudes para cada ventana y se obtienen las frecuencias asociadas utilizando `fftfreq`. Esta transformación permite llevar la señal del dominio del tiempo al dominio de la frecuencia, donde se pueden aplicar las métricas mencionadas anteriormente para describir la actividad muscular de manera más efectiva. La visualización de estos espectros en gráficas permite observar los cambios en la activación muscular en tiempo real, facilitando la identificación de patrones y anomalías en la respuesta del músculo.
 ```c
 # --- Función para realizar el análisis espectral ---
 def spectral_analysis(windowed_data, sampling_rate, window_size):
@@ -296,6 +299,59 @@ def spectral_analysis(windowed_data, sampling_rate, window_size):
     freqs = fftfreq(window_size, 1/sampling_rate)[:window_size // 2]
     return spectral_data, freqs
 ```
+
+![image](https://github.com/user-attachments/assets/29f599a2-3a70-44c1-bbcf-d6a69ca43f66)
+
+![image](https://github.com/user-attachments/assets/aa0ea365-6d7a-4ae8-bc50-007645242777)
+
+![image](https://github.com/user-attachments/assets/a8fedb81-48c9-4bd3-b305-2a12d50edbab)
+
+![image](https://github.com/user-attachments/assets/7e77911b-cac4-47ee-8833-5b43a1f41852)
+
+![image](https://github.com/user-attachments/assets/2ced3ba8-2ad1-44f2-b2c7-a55d962e42cb)
+
+### Cálculo de Parámetros de Frecuencia (`calculate_frequency_parameters`)
+
+La función `calculate_frequency_parameters` es fundamental para el análisis espectral de las señales EMG, ya que permite extraer características clave que describen el comportamiento de la señal en el dominio de la frecuencia. Esta función se centra en calcular tres parámetros importantes: la **frecuencia dominante**, la **frecuencia media** y la **desviación estándar** del espectro de frecuencias. Estos parámetros son esenciales para entender la dinámica muscular y evaluar la fatiga o el rendimiento.
+
+#### Frecuencia Dominante
+
+La **frecuencia dominante** es el valor de frecuencia que corresponde a la amplitud máxima en el espectro de la señal. Para determinarla, se utiliza la función `np.argmax(spectrum)`, que identifica el índice de la amplitud más alta en el espectro. A partir de este índice, se obtiene la frecuencia dominante del espectro, que proporciona información crucial sobre la actividad muscular más intensa durante la contracción. En el contexto de la señal EMG, la frecuencia dominante puede estar relacionada con el tipo de fibras musculares activas y su nivel de activación. Identificar este parámetro es necesario para monitorear la efectividad de los entrenamientos y adaptar las rutinas según la respuesta del músculo a diferentes intensidades de ejercicio.
+
+#### Frecuencia Media
+
+La **frecuencia media** es otra métrica clave que se calcula como un promedio ponderado de las frecuencias, donde las amplitudes del espectro actúan como pesos. Esto se lleva a cabo sumando el producto de cada frecuencia por su correspondiente amplitud en el espectro y dividiendo el resultado por la potencia total del espectro, es decir, la suma de todas las amplitudes. Esta métrica proporciona una visión más completa de la actividad muscular, ya que tiene en cuenta no solo la frecuencia dominante, sino también cómo se distribuyen las amplitudes en todo el espectro. La frecuencia media es especialmente útil para evaluar cambios en la activación muscular a lo largo del tiempo, especialmente en situaciones de fatiga. Cambios en la frecuencia media en las gráficas pueden indicar cómo la fatiga afecta la capacidad de los músculos para generar fuerza, mostrando una tendencia a la disminución de esta frecuencia con el tiempo durante ejercicios prolongados.
+
+#### Desviación Estándar
+
+La **desviación estándar** de las amplitudes en el espectro es otra medida importante que refleja la variabilidad del contenido espectral. Un valor bajo de desviación estándar indica que las amplitudes están concentradas alrededor de la frecuencia dominante, mientras que un valor alto sugiere una mayor dispersión de las amplitudes en el espectro. Esto puede ser indicativo de un comportamiento muscular más variable o menos consistente durante las contracciones. En términos prácticos, la desviación estándar puede ayudar a identificar la estabilidad de la activación muscular y su respuesta a diferentes niveles de esfuerzo. En las gráficas, un aumento en la desviación estándar puede manifestarse como un espectro más amplio, lo que indica que la activación muscular está siendo menos consistente y podría ser un signo de fatiga o ineficacia en la contracción muscular.
+
+```c
+# --- Función para calcular la frecuencia dominante, media y desviación estándar --- 
+def calculate_frequency_parameters(spectrum, freqs):
+    # Frecuencia dominante
+    dominant_freq_index = np.argmax(spectrum)
+    dominant_frequency = freqs[dominant_freq_index]
+
+    # Frecuencia media
+    total_power = np.sum(spectrum)
+    weighted_freq_sum = np.sum(freqs * spectrum)
+    mean_frequency = weighted_freq_sum / total_power if total_power > 0 else 0
+
+    # Desviación estándar
+    std_dev_frequency = np.std(spectrum)
+
+    return {
+        'dominant_frequency': dominant_frequency,
+        'mean_frequency': mean_frequency,
+        'std_dev_frequency': std_dev_frequency
+    }
+
+```
+
+![image](https://github.com/user-attachments/assets/cb524516-acb6-41b9-a452-ec6dd586fc6d)
+
+
 
 
 
