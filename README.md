@@ -252,8 +252,6 @@ Además, el filtrado previo aplicado a la señal (como el filtrado Butterworth) 
 
 El aventanamiento también permite realizar análisis espectral en cada ventana individualmente. Dado que el análisis se realiza en segmentos más pequeños y controlados, se puede aplicar la transformada de Fourier de manera más efectiva. Esto significa que se puede observar cómo varía la señal en términos de frecuencia y amplitud, lo que facilita la identificación de patrones de activación muscular mientras se reduce el impacto del ruido.
 
-Claro, aquí tienes la explicación organizada por párrafos:
-
 ### Cálculo de la Frecuencia Mediana por Ventana (`calculate_median_frequency`)
 
 La función `calculate_median_frequency` tiene como objetivo calcular la **frecuencia mediana** de cada ventana de datos espectrales obtenidos a través de la Transformada de Fourier. La frecuencia mediana es un valor estadístico que divide el espectro de frecuencia en dos mitades, donde la mitad inferior tiene amplitudes más bajas y la mitad superior tiene amplitudes más altas. Para lograr esto, la función utiliza el cálculo de la suma acumulativa de las amplitudes del espectro para identificar el punto en el que se alcanza la mitad del total.
