@@ -10,6 +10,7 @@ Septiembre 2024
 * [Adquisición de la Señal EMG](#adquisicion)
 * [Filtrado de la Señal](#filtro)
 * [Aventanamiento](#ventanas)
+* [Analisis Espectral](#analisis)
 * [Prueba de hipotesis](#hipotesis)
 * [Menu](#menu)
 * [Contacto](#contacto)
@@ -116,6 +117,8 @@ IMAGEEEEEEEEEEEEN
 El proceso de toma de señal EMG con un STM32 y un módulo de ECG (AD8232) se lleva a cabo en varios pasos clave. Primero, se utiliza un módulo ECG para captar la señal EMG del músculo, en este caso el bíceps. Los **electrodos de superficie** se colocan sobre el músculo para detectar la actividad eléctrica generada durante la contracción muscular. Esta señal es muy pequeña y ruidosa, por lo que el módulo ECG se encarga de amplificarla y filtrar las frecuencias no deseadas, como el ruido ambiental.
 
 ![OIP](https://github.com/user-attachments/assets/03851d9f-e551-42c7-99f5-8d4adc33a956)
+
+![image](https://github.com/user-attachments/assets/c6b748eb-7d96-441c-8cfd-c624bd4a4264)
 
 
 Una vez que la señal ha sido filtrada y amplificada, el **STM32** entra en acción. Este microcontrolador tiene un **ADC (Conversor Analógico a Digital)** que convierte la señal EMG, que es analógica, en una señal digital. Esto permite que el STM32 procese la señal, almacene temporalmente los datos y, si es necesario, aplicar filtros adicionales que se realizan mas adelante para mejorar la calidad de la señal. El microcontrolador se configura para tomar muestras de la señal EMG a una frecuencia adecuada, típicamente entre 500 y 1000 Hz, lo que garantiza que se capturen detalles suficientes de la actividad muscular.
