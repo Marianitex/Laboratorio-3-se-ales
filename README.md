@@ -118,9 +118,6 @@ El proceso de toma de señal EMG con un STM32 y un módulo de ECG (AD8232) se ll
 
 ![OIP](https://github.com/user-attachments/assets/03851d9f-e551-42c7-99f5-8d4adc33a956)
 
-![image](https://github.com/user-attachments/assets/c6b748eb-7d96-441c-8cfd-c624bd4a4264)
-
-
 Una vez que la señal ha sido filtrada y amplificada, el **STM32** entra en acción. Este microcontrolador tiene un **ADC (Conversor Analógico a Digital)** que convierte la señal EMG, que es analógica, en una señal digital. Esto permite que el STM32 procese la señal, almacene temporalmente los datos y, si es necesario, aplicar filtros adicionales que se realizan mas adelante para mejorar la calidad de la señal. El microcontrolador se configura para tomar muestras de la señal EMG a una frecuencia adecuada, típicamente entre 500 y 1000 Hz, lo que garantiza que se capturen detalles suficientes de la actividad muscular.
 
 Después de la adquisición, el STM32 transmite los datos a una interfaz externa, normalmente una computadora. Esto se puede hacer mediante **comunicación inalámbrica**, como Bluetooth. Esta transmisión permite que los datos EMG sean visualizados o procesados en tiempo real.
@@ -137,8 +134,12 @@ def read_signal_from_excel(file_path):
     data = df.iloc[:, 1].values
     return time, data
 ```
-
+### Fragmento señal emg cruda desde excel
 ![image](https://github.com/user-attachments/assets/bea2089c-29a8-49f4-9eaf-088498a38250)
+
+### Señal emg cruda desde excel completa 
+
+![image](https://github.com/user-attachments/assets/c6b748eb-7d96-441c-8cfd-c624bd4a4264)
 
 
 La gráfica de la señal capturada refleja información crucial sobre la actividad muscular, destacando varios aspectos clave que justifican la calidad y utilidad de los datos adquiridos. En este caso, la **frecuencia de muestreo** es de 1000 Hz, lo que implica que la señal se muestrea 1000 veces por segundo. Esta alta frecuencia de muestreo es esencial para registrar adecuadamente la actividad eléctrica del músculo, permitiendo capturar cambios rápidos en la señal EMG. Dado que las señales EMG pueden contener componentes de frecuencia de hasta 500 Hz, una frecuencia de muestreo de 1000 Hz asegura que se evite el aliasing, cumpliendo con el teorema de muestreo de Nyquist.
