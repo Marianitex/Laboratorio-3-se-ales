@@ -134,6 +134,10 @@ def read_signal_from_excel(file_path):
     data = df.iloc[:, 1].values
     return time, data
 ```
+
+![image](https://github.com/user-attachments/assets/bea2089c-29a8-49f4-9eaf-088498a38250)
+
+
 La gráfica de la señal capturada refleja información crucial sobre la actividad muscular, destacando varios aspectos clave que justifican la calidad y utilidad de los datos adquiridos. En este caso, la **frecuencia de muestreo** es de 1000 Hz, lo que implica que la señal se muestrea 1000 veces por segundo. Esta alta frecuencia de muestreo es esencial para registrar adecuadamente la actividad eléctrica del músculo, permitiendo capturar cambios rápidos en la señal EMG. Dado que las señales EMG pueden contener componentes de frecuencia de hasta 500 Hz, una frecuencia de muestreo de 1000 Hz asegura que se evite el aliasing, cumpliendo con el teorema de muestreo de Nyquist.
 
 La **duración de la señal** es de 30.00 segundos, un periodo adecuado que permite el registro de múltiples contracciones musculares. Este tiempo es beneficioso para observar variaciones en la actividad muscular a lo largo del tiempo y evaluar la respuesta del músculo ante diferentes niveles de esfuerzo. Además, la duración proporciona un contexto suficiente para estudiar la fatiga muscular y cómo esta afecta la función del músculo durante el ejercicio.
@@ -145,6 +149,16 @@ Adicionalmente, se registraron **10 contracciones musculares** durante este peri
 
 <a name="filtro"></a> 
 ## Filtrado de la señal
+
+```c
+# --- Función para aplicar filtros pasa altas y pasa bajas ---
+def butter_filter(data, lowcut, highcut, fs, order=5):
+    nyquist = 0.5 * fs
+    low = lowcut / nyquist
+    high = highcut / nyquist
+    b, a = butter(order, [low, high], btype='band')
+    return filtfilt(b, a, data)
+```
 
 ### Filtro Butterworth
 
@@ -166,15 +180,8 @@ Además, un filtro de orden 5 es generalmente suficiente para lograr una separac
 
 El **ripple** se refiere a las pequeñas variaciones en la respuesta en frecuencia dentro de la banda pasante de un filtro. En el caso de los filtros Butterworth, el ripple es generalmente inexistente, lo que significa que la señal dentro de la banda pasante no presenta fluctuaciones significativas en amplitud. Esto es una ventaja, ya que asegura que la señal EMG no se vea afectada por cambios inesperados en la amplitud dentro de su rango de frecuencias relevantes. 
 
-```c
-# --- Función para aplicar filtros pasa altas y pasa bajas ---
-def butter_filter(data, lowcut, highcut, fs, order=5):
-    nyquist = 0.5 * fs
-    low = lowcut / nyquist
-    high = highcut / nyquist
-    b, a = butter(order, [low, high], btype='band')
-    return filtfilt(b, a, data)
-```
+![image](https://github.com/user-attachments/assets/bac5cf2d-c4ca-481e-9d2f-c75bf51e5c90)
+
 
 <a name="Ventanas"></a> 
 ## Aventanamiento
