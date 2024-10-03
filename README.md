@@ -5,7 +5,7 @@
 Septiembre 2024
 
 ## Tabla de contenidos
-* [EMG, Contraccion muscular y Fatiga](#emg)
+* [¿Que se va a realizar?](#emg)
 * [Librerias](#librerias)
 * [Adquisición de la Señal EMG](#adquisicion)
 * [Filtrado de la Señal](#filtro)
@@ -15,7 +15,7 @@ Septiembre 2024
 * [Contacto](#contacto)
 ---
 <a name="iemg"></a> 
-## EMG, Contraccion muscular y Fatiga
+## ¿Que se va a realizar?
 
 ### 1.EMG
 
@@ -146,11 +146,34 @@ Adicionalmente, se registraron **10 contracciones musculares** durante este peri
 <a name="filtro"></a> 
 ## Filtrado de la señal
 
+### Filtro Butterworth
 
+El **filtro Butterworth** es un tipo de filtro ampliamente utilizado en procesamiento de señales, conocido por su respuesta en frecuencia que es lo más plana posible en la banda pasante. Esto significa que las amplitudes de las frecuencias dentro de esta banda son constantes, lo que ayuda a mantener la integridad de la señal durante su procesamiento. Su característica de suavidad lo convierte en una opción ideal para aplicaciones biomédicas, como la electromiografía (EMG), donde es crucial minimizar cualquier distorsión en la señal que se está analizando.
 
+Una de las características más importantes del filtro Butterworth es el **orden del filtro**, que determina la agudeza de la caída de la respuesta en frecuencia fuera de la banda pasante. Un filtro de orden más alto proporcionará una transición más abrupta entre las frecuencias permitidas y las que se atenuarán. En este caso, se eligió un **orden de 5** para el filtro, lo que permite una reducción significativa de las frecuencias no deseadas mientras se preservan las frecuencias de interés. Este orden es adecuado para la filtración de señales EMG, donde la respuesta en frecuencia más plana en la banda pasante es esencial para obtener mediciones precisas y representativas de la actividad muscular.
+
+### Frecuencias de Corte en EMG
+
+Las frecuencias de corte elegidas para filtrar la señal EMG son típicamente de 20 Hz para la frecuencia baja y de 450 Hz para la frecuencia alta. Esta selección se basa en la fisiología muscular y las características inherentes a la señal EMG. Por un lado, las frecuencias por debajo de 20 Hz pueden estar contaminadas por ruido de fondo, como interferencias de la red eléctrica o artefactos de movimiento, que no reflejan la actividad muscular. Al establecer esta frecuencia de corte, se asegura que solo se analicen las frecuencias relevantes para la activación muscular.
+
+Por otro lado, establecer una frecuencia de corte alta de 450 Hz es igualmente importante, ya que las frecuencias superiores a este umbral generalmente no están asociadas con la actividad muscular. Estas frecuencias pueden incluir ruido de alta frecuencia de equipos de adquisición y otros artefactos indeseados. Al filtrar estas componentes no deseadas, se garantiza que la señal analizada contenga únicamente información relevante sobre la activación muscular.
+
+### Orden del Filtro (5) y Cálculo del Ripple
+
+La elección de un filtro de **orden 5** es un balance entre la efectividad del filtrado y la complejidad computacional. Un filtro de este orden proporciona una transición más rápida entre la banda pasante y la banda atenuada, lo que permite una atenuación más eficaz de las frecuencias no deseadas. Esto es fundamental para mejorar la calidad de la señal EMG procesada.
+
+Además, un filtro de orden 5 es generalmente suficiente para lograr una separación efectiva de las frecuencias sin introducir complicaciones adicionales que podrían llevar a un comportamiento no deseado. Aumentar el orden del filtro puede resultar en un comportamiento más complejo y potencialmente inestable. Por lo tanto, seleccionar un filtro de orden 5 ayuda a garantizar tanto la estabilidad como la efectividad en la eliminación de componentes no deseadas.
+
+El **ripple** se refiere a las pequeñas variaciones en la respuesta en frecuencia dentro de la banda pasante de un filtro. En el caso de los filtros Butterworth, el ripple es generalmente inexistente, lo que significa que la señal dentro de la banda pasante no presenta fluctuaciones significativas en amplitud. Esto es una ventaja, ya que asegura que la señal EMG no se vea afectada por cambios inesperados en la amplitud dentro de su rango de frecuencias relevantes. 
 
 ```c
-
+# --- Función para aplicar filtros pasa altas y pasa bajas ---
+def butter_filter(data, lowcut, highcut, fs, order=5):
+    nyquist = 0.5 * fs
+    low = lowcut / nyquist
+    high = highcut / nyquist
+    b, a = butter(order, [low, high], btype='band')
+    return filtfilt(b, a, data)
 ```
 
 <a name="Ventanas"></a> 
