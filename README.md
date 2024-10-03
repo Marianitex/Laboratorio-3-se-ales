@@ -183,9 +183,12 @@ La elección de un filtro de **orden 5** es un balance entre la efectividad del 
 Además, un filtro de orden 5 es generalmente suficiente para lograr una separación efectiva de las frecuencias sin introducir complicaciones adicionales que podrían llevar a un comportamiento no deseado. Aumentar el orden del filtro puede resultar en un comportamiento más complejo y potencialmente inestable. Por lo tanto, seleccionar un filtro de orden 5 ayuda a garantizar tanto la estabilidad como la efectividad en la eliminación de componentes no deseadas.
 
 El **ripple** se refiere a las pequeñas variaciones en la respuesta en frecuencia dentro de la banda pasante de un filtro. En el caso de los filtros Butterworth, el ripple es generalmente inexistente, lo que significa que la señal dentro de la banda pasante no presenta fluctuaciones significativas en amplitud. Esto es una ventaja, ya que asegura que la señal EMG no se vea afectada por cambios inesperados en la amplitud dentro de su rango de frecuencias relevantes. 
-
+### Fragmento señal emg filtrada desde excel
 ![image](https://github.com/user-attachments/assets/bac5cf2d-c4ca-481e-9d2f-c75bf51e5c90)
 
+### Señal emg filtrada desde excel completa
+
+![image](https://github.com/user-attachments/assets/a6201bb5-802a-4e5b-8774-adeb7dcd3fcc)
 
 <a name="Ventanas"></a> 
 ## Aventanamiento
