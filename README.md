@@ -97,25 +97,34 @@ La electromiografía (EMG) en el bíceps se realiza utilizando electrodos que re
 
 ### ¿Por qué es un buen muestreo el bíceps?
 
-El bíceps es un músculo ideal para la toma de señales EMG por varias razones:
+Primero, su **aislamiento muscular** es clave. El bíceps braquial es un músculo grande y superficial, lo que facilita la colocación de los electrodos de superficie y minimiza la interferencia de otros músculos cercanos. Esto permite obtener una señal clara y bien definida, lo cual es esencial para obtener datos precisos.
 
-1. **Aislamiento del músculo**:
-   - El bíceps braquial es un músculo grande y superficial, lo que facilita la colocación de los electrodos de superficie y minimiza la interferencia de otros músculos cercanos. Esto permite obtener una señal clara y bien definida.
+Además, el bíceps tiene una **alta accesibilidad**. Al estar ubicado en una zona fácil de alcanzar, se facilita la colocación de los electrodos, la calibración del equipo y el registro de la señal, incluso en actividades dinámicas como el levantamiento de peso.
 
-2. **Accesibilidad**:
-   - El bíceps está en una ubicación muy accesible, lo que facilita la colocación de los electrodos, la calibración del equipo y el registro de la señal, incluso en actividades dinámicas como levantamiento de peso.
+El bíceps también participa en una **amplia gama de movimientos**. Se activa en distintos tipos de actividades, como la flexión del codo y la rotación del antebrazo, lo que permite medir una gran variedad de contracciones musculares, desde ligeras hasta máximas, proporcionando una representación integral de la actividad muscular.
 
-3. **Amplia gama de movimientos**:
-   - El bíceps se activa en varios tipos de movimientos, como la flexión del codo y la rotación del antebrazo. Esto permite medir una gama completa de actividades musculares, desde contracciones ligeras hasta esfuerzos máximos.
+Otra ventaja es su **capacidad para medir la fatiga muscular**. Al ser fácilmente fatigable, especialmente en ejercicios repetitivos o con pesos, es un excelente candidato para estudiar la fatiga muscular. Durante la fatiga, se observan cambios notables en la señal EMG, como un aumento en la amplitud o una disminución en la frecuencia, lo que permite extraer información valiosa sobre el rendimiento muscular bajo esfuerzo.
 
-4. **Capacidad de medir la fatiga muscular**:
-   - Dado que el bíceps es fácilmente fatigable (especialmente durante ejercicios repetitivos o con pesos), es un buen candidato para estudiar la fatiga muscular. Durante la fatiga, se pueden observar cambios en la señal EMG, como un aumento en la amplitud o una disminución en la frecuencia de la señal, lo que proporciona información valiosa sobre el rendimiento muscular bajo esfuerzo.
+Además, la **buena calidad de la señal** EMG es otro punto a favor del bíceps. Está cubierto por una capa de tejido relativamente fina, sin una cantidad excesiva de grasa o capas gruesas de piel, lo que reduce la interferencia de otros tejidos y mejora la claridad de la señal.
 
-5. **Buena calidad de señal**:
-   - Como el bíceps está cubierto por una capa de tejido relativamente fina (sin grasa excesiva ni capas gruesas de piel), la señal EMG que se captura suele ser de buena calidad, con menos interferencia de otros tejidos.
+Por último, el bíceps es comúnmente utilizado en **estudios neuromusculares**, dada su simplicidad anatómica y la facilidad para aislarlo en pruebas de fuerza o resistencia. Esto lo convierte en un músculo ideal para investigar la interacción entre el sistema nervioso y el sistema muscular.
 
-6. **Uso en estudios neuromusculares**:
-   - El bíceps es un músculo comúnmente utilizado en estudios de contracción y activación neuromuscular debido a su simplicidad anatómica y la facilidad para aislarlo en pruebas de fuerza o resistencia. Esto lo convierte en un buen músculo para estudiar la interacción entre el sistema nervioso y el sistema muscular.
+IMAGEEEEEEEEEEEEN
+
+### Adquisición de la señal EMG con STM32
+
+El proceso de toma de señal EMG con un STM32 y un módulo de ECG (AD8232) se lleva a cabo en varios pasos clave. Primero, se utiliza un módulo ECG para captar la señal EMG del músculo, en este caso el bíceps. Los **electrodos de superficie** se colocan sobre el músculo para detectar la actividad eléctrica generada durante la contracción muscular. Esta señal es muy pequeña y ruidosa, por lo que el módulo ECG se encarga de amplificarla y filtrar las frecuencias no deseadas, como el ruido ambiental.
+
+![OIP](https://github.com/user-attachments/assets/03851d9f-e551-42c7-99f5-8d4adc33a956)
+
+
+Una vez que la señal ha sido filtrada y amplificada, el **STM32** entra en acción. Este microcontrolador tiene un **ADC (Conversor Analógico a Digital)** que convierte la señal EMG, que es analógica, en una señal digital. Esto permite que el STM32 procese la señal, almacene temporalmente los datos y, si es necesario, aplicar filtros adicionales que se realizan mas adelante para mejorar la calidad de la señal. El microcontrolador se configura para tomar muestras de la señal EMG a una frecuencia adecuada, típicamente entre 500 y 1000 Hz, lo que garantiza que se capturen detalles suficientes de la actividad muscular.
+
+Después de la adquisición, el STM32 transmite los datos a una interfaz externa, normalmente una computadora. Esto se puede hacer mediante **comunicación inalámbrica**, como Bluetooth. Esta transmisión permite que los datos EMG sean visualizados o procesados en tiempo real.
+
+En la **interfaz de usuario**, los datos son recibidos y visualizados en tiempo real utilizando un programa en la computadora, como Python. Estas herramientas permiten graficar la señal EMG y realizar análisis básicos. Además, los datos se pueden almacenar en un archivo para su posterior procesamiento. Un formato común es **Excel**, que permite almacenar los datos en columnas de tiempo y voltaje.
+
+Finalmente, los datos se guardan en un archivo **Excel** para análisis posterior. Con la ayuda de bibliotecas como `pandas`, los datos se pueden leer fácilmente desde el archivo Excel, lo que permite realizar análisis adicionales como filtrado, análisis de frecuencias (FFT) o estudios de fatiga muscular. Este flujo de trabajo proporciona una forma eficiente de captar, visualizar y almacenar señales EMG utilizando un STM32 y un módulo ECG.
 
 ```c
 # --- Función para leer la señal desde Excel ---
