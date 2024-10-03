@@ -186,18 +186,68 @@ El **ripple** se refiere a las pequeñas variaciones en la respuesta en frecuenc
 <a name="Ventanas"></a> 
 ## Aventanamiento
 
+```c
+# --- Función para dividir la señal en ventanas y aplicar una ventana de Hamming ---
+def apply_windowing(filtered_data, sampling_rate):
+    window_size = int(0.5 * sampling_rate)  # Definir tamaño de la ventana en base al tiempo (0.5 segundos aquí)
+    window = windows.hamming(window_size)   # Ventana de Hamming
+    num_windows = len(filtered_data) // window_size  # Número de ventanas completas en la señal
+    windowed_data = []
+    
+    for i in range(num_windows):
+        segment = filtered_data[i*window_size:(i+1)*window_size]  # Extraer segmentos de la señal filtrada
+        windowed_segment = segment * window  # Aplicar la ventana
+        windowed_data.append(windowed_segment)
+
+    return np.array(windowed_data), window_size
+```
+
+![image](https://github.com/user-attachments/assets/a6201bb5-802a-4e5b-8774-adeb7dcd3fcc)
+
+
+El **aventaneo** es un proceso crítico en el análisis de señales que implica dividir una señal continua en segmentos más pequeños o ventanas. Este enfoque es particularmente útil en el procesamiento de señales EMG, ya que permite realizar un análisis más detallado y localizado de la señal en el tiempo. En el código proporcionado, se utiliza una **ventana de Hamming**, que es una de las muchas ventanas disponibles, y se justifica su elección por varias razones.
+
+#### Criterios para Seleccionar la Ventana de Hamming
+
+La **ventana de Hamming** es elegida principalmente por su capacidad para minimizar las distorsiones y el “ringing” (eco) que pueden ocurrir en los bordes de los segmentos de la señal. A diferencia de ventanas como la rectangular, que pueden introducir discontinuidades al cortar la señal, la ventana de Hamming suaviza estos bordes, lo que ayuda a reducir las fluctuaciones indeseadas en la frecuencia cuando se realiza la transformada de Fourier. Esta propiedad es esencial para obtener un análisis espectral preciso, ya que permite que la energía de la señal se distribuya de manera más uniforme en el espectro de frecuencias.
+
+#### Tamaño y Forma de la Ventana
+
+En el código, el tamaño de la ventana se establece en **0.5 segundos**, calculado como el producto de la frecuencia de muestreo (1000 Hz en este caso). Esto significa que cada ventana contendrá 500 muestras de datos. Este tamaño se selecciona en función del equilibrio entre la resolución temporal y la capacidad de capturar adecuadamente la variabilidad de la señal. Un tamaño de ventana más pequeño podría proporcionar una mayor resolución temporal, pero a costa de reducir la cantidad de datos analizados en cada ventana, lo que podría no ser suficiente para obtener resultados significativos.
+
+#### Aplicación de la Ventana
+
+El proceso de aplicación de la ventana de Hamming se realiza extrayendo segmentos de la señal filtrada en cada iteración del bucle. Para cada segmento de datos, se multiplica por la ventana de Hamming, lo que modifica la amplitud de las muestras en los extremos del segmento, haciendo que caigan gradualmente a cero. Este enfoque no solo suaviza la señal, sino que también ayuda a minimizar la discontinuidad en los límites de las ventanas, preservando la integridad de la señal durante el análisis.
+
+#### Comparación de la Ventana con la Señal
+
+Para ilustrar el efecto del aventanamiento, es útil comparar visualmente la señal filtrada original con la ventana aplicada. Antes de la convolución, la señal muestra variaciones que pueden incluir ruidos o picos agudos. Sin embargo, una vez que se aplica la ventana de Hamming, se observa que las amplitudes en los extremos de cada ventana se reducen significativamente, lo que permite una transición más suave hacia cero. Esta comparación puede visualizarse mediante gráficos que muestran la señal original y las ventanas aplicadas superpuestas. 
+
+![image](https://github.com/user-attachments/assets/e3be6e16-0a6c-48e6-b64b-3599c7b14554)
+
+![image](https://github.com/user-attachments/assets/09b173a1-b411-4e37-806c-fc75ce48ad59)
+
+![image](https://github.com/user-attachments/assets/532ac47a-4c7d-4ec5-9b22-b97d3c3c483d)
+
+![image](https://github.com/user-attachments/assets/83af830d-150b-4b34-a04b-5574e6af56b8)
+
+![image](https://github.com/user-attachments/assets/4097525b-8281-473c-b7f2-0b195bd995dd)
 
 
 <a name="hipotesis"></a> 
 ## Prueba de hipotesis
 
 
+```c
 
+```
 
 <a name="menu"></a> 
 ## Menu
 
+```c
 
+```
 
 
 <a name="contacto"></a> 
